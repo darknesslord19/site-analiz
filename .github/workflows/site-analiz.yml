@@ -1,0 +1,41 @@
+name: Site Analiz
+
+on:
+  push:
+    paths:
+      - 'ajob/**'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  analyze:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Gerekli paket
+        run: pip install beautifulsoup4
+
+      - name: Siteyi analiz et
+        run: python3 tools-a/analyze.py ajob/config.json
+
+      - name: Sonucu analysis dalına gönder
+        if: always()
+        run: |
+          mkdir -p /tmp/aout && cp -r out/. /tmp/aout/ 2>/dev/null || true
+          echo "${GITHUB_SHA}" > /tmp/aout/source-sha.txt
+          git config user.name "github-actions"
+          git config user.email "actions@github.com"
+          git checkout --orphan analysis
+          git rm -rf . -q || true
+          find . -mindepth 1 -maxdepth 1 ! -name .git -exec rm -rf {} +
+          cp -r /tmp/aout/. .
+          git add -A
+          git commit -q -m "Site analizi (${GITHUB_SHA::7})"
+          git push -f origin analysis
