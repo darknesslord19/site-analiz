@@ -40,8 +40,9 @@ def get(url,accept=None,headers=None,method='GET',body=None,timeout=20):
 def blocked(r):
     return r['status'] in (403,429,503) or bool(re.search(r'Just a moment|cf-chl|Attention Required|captcha|Enable JavaScript and cookies',(r['text'] or '')[:4000],re.I))
 def txt(s): return re.sub(r'\s+',' ',s or '').strip()
+STATE=re.compile(r'^(active|current|selected|open|show|is-[\w-]+|has-[\w-]+|disabled|hidden)$',re.I)
 def selof(el):
-    c=[x for x in (el.get('class') or []) if x]
+    c=[x for x in (el.get('class') or []) if x and not STATE.match(x)]
     return el.name+('.'+'.'.join(c) if c else '')
 def soup(t): return BeautifulSoup(t,'html.parser')
 
@@ -63,18 +64,19 @@ def page_info(s,base):
     inputs=[{'sel':selof(e)+('#'+e['id'] if e.get('id') else ''),'name':e.get('name',''),'placeholder':e.get('placeholder','')} for e in s.select('input[type=search],input[name=q],input[name=search],input[name=s],input.search-input,input[id*=earch]')][:3]
     return {'title':txt(s.title.text if s.title else ''),'h1':txt(s.h1.text if s.h1 else ''),'ogTitle':meta('og:title'),'ogImage':meta('og:image'),'description':meta('description'),'csrf':bool(csrf),'scripts':scripts,'inlineScripts':len([x for x in s.find_all('script') if not x.get('src')]),'dataEndpoints':ep[:20],'forms':forms,'searchInputs':inputs}
 
-def card_pattern(s,base):
+def card_pattern(s,base,minu=4):
     groups={}
     for a in s.find_all('a',href=True):
         h=absu(a['href'],base)
         if not h or not same_host(h): continue
         p=urlparse(h).path
         if not re.match(r'^/(dizi|film|series|movie|izle|anime)\b',p) and not re.search(r'-izle\b',p): continue
+        if re.search(r'/(bolum|episode|sezon|season)[-/]',p): continue
         groups.setdefault(selof(a),[]).append((a,h))
     best=None
     for k,v in groups.items():
         u=len({h for _,h in v})
-        if u>=4 and (best is None or u>best[2]): best=(k,v,u)
+        if u>=minu and (best is None or u>best[2]): best=(k,v,u)
     if not best: return None
     k,v,u=best;items=[]
     for a,h in v[:3]:
@@ -92,12 +94,21 @@ def episodes(s,base):
     for e in links: g.setdefault(selof(e),[]).append(e)
     k=max(g,key=lambda x:len(g[x]));l=g[k];e0=l[0];par=e0.parent
     nums=[c for c in e0.find_all(True) if re.fullmatch(r'\d+',txt(c.get_text()))]
-    return {'itemSel':k,'count':len(l),'containerSel':selof(par) if par else '','seasonAttr':'data-season' if par and par.get('data-season') else '','numSel':selof(nums[0]) if nums else '','sample':[{'href':absu(x['href'],base),'text':txt(x.get_text())} for x in l[:2]]}
+    cls=[c for c in (e0.get('class') or []) if c]
+    tit=[c for c in e0.find_all(True) if not c.find(True) and re.search(r'title|name|baslik|ad\b',' '.join(c.get('class') or []),re.I)]
+    return {'itemSel':k,'itemClass':('.'+'.'.join(cls)) if cls else k,'count':len(l),'containerSel':selof(par) if par else '','seasonAttr':'data-season' if par and par.get('data-season') else '','numSel':selof(nums[0]) if nums else '','titleSel':selof(tit[0]) if tit else '','sample':[{'href':absu(x['href'],base),'text':txt(x.get_text())} for x in l[:2]]}
 
 def players(s,base):
     frames=[absu(e.get('data-src') or e.get('src'),base) for e in s.select('iframe[data-src],iframe[src]')]
     tabs=[txt(e.get_text()) for e in s.select('button[data-index],[class*=tab][data-index]') if txt(e.get_text())]
     return [{'url':u,'label':tabs[i] if i<len(tabs) else '','host':urlparse(u).hostname} for i,u in enumerate(frames) if u]
+
+def player_cfg(s):
+    fr=s.select_one('iframe[data-src],iframe[src]')
+    if not fr: return None
+    par=fr.parent
+    tabs=s.select('button[data-index],[class*=tab][data-index]')
+    return {'attr':'data-src' if fr.get('data-src') else 'src','box':selof(par) if par and par.name!='body' else '','labelSel':selof(tabs[0]) if tabs else ''}
 
 def series_detail(s,base):
     kw=re.compile(r'desc|summary|plot|konu|ozet|özet|about|overview',re.I)
@@ -153,7 +164,57 @@ def classify(r,q):
         return {'type':'json','count':len(a),'score':hit*3+len(a),'keys':list(a[0].keys())[:12],'sample':[str(o.get('title') or o.get('name') or o.get('baslik') or o.get('ad') or json.dumps(o,ensure_ascii=False)[:60]) for o in a[:3]]}
     s=soup(t);cards=s.select('a.autosuggest-item,a.poster-card');lst=cards or s.select('a[href*="/dizi/"],a[href*="/film/"]')
     hit=sum(1 for e in lst if ql in (txt(e.get_text())+' '+((e.find('img') or {}).get('alt','') if e.find('img') else '')).lower())
-    return {'type':'html','count':len(lst),'score':hit*3+len(lst),'sample':[txt(e.get_text())[:50] for e in lst[:3]],'sel':selof(cards[0]) if cards else ''}
+    cp=card_pattern(s,SITE,1)
+    return {'type':'html','count':len(lst),'score':hit*3+len(lst),'sample':[txt(e.get_text())[:50] for e in lst[:3]],'sel':selof(cards[0]) if cards else '',
+            'cardSel':(cp['anchorSel'] if cp else (selof(cards[0]) if cards else 'a[href*="/dizi/"]')),'cardTitle':cp['titleSel'] if cp else '','cardPoster':cp['posterAttr'] if cp else 'src'}
+
+BAD=re.compile(r'giris|kayit|login|register|logout|iletisim|hakkimizda|contact|about|dmca|gizlilik|privacy|uyelik|profil|sifre|cerez|kullanim|reklam|forum|seviye|gruplar|testler|\.(jpg|png|svg|css|js)$',re.I)
+def heading_before(a):
+    for par in list(a.parents)[:5]:
+        h=par.find(['h1','h2','h3','h4'])
+        if h and 2<=len(txt(h.get_text()))<=60: return txt(h.get_text())
+    return ''
+def discover(s,base):
+    cands=[];seen=set()
+    hc=card_pattern(s,base);pref={urlparse(h).path.strip('/').split('/')[0] for h in (hc['hrefs'] if hc else [])}
+    def add(name,u):
+        if not u or not same_host(u): return
+        p=urlparse(u).path.rstrip('/')
+        if not p or p in seen or BAD.search(p): return
+        segs=[x for x in p.split('/') if x]
+        if len(segs)>=2 and segs[0] in pref: return
+        seen.add(p);cands.append((name,u))
+    for a in s.find_all('a',href=True):
+        t=txt(a.get_text())
+        if re.search(r'tümünü|tümü|view all|see all|hepsi|daha fazla',t,re.I): add(heading_before(a) or t,absu(a['href'],base))
+    for a in s.select('nav a[href],header a[href],aside a[href],[class*=menu] a[href],[class*=sidebar] a[href]'):
+        t=txt(a.get_text())
+        if 2<=len(t)<=28: add(t,absu(a['href'],base))
+    cats=[]
+    for name,u in cands[:16]:
+        if len(cats)>=10: break
+        r=get(u);sleep(.25)
+        if not r['text'] or blocked(r): continue
+        cp=card_pattern(soup(r['text']),r['url'])
+        if '\ufffd' in name or re.search(r'tümünü|tümü|view all|see all|hepsi|daha fazla',name,re.I) or re.fullmatch(r'\d+\s.*',name): name=urlparse(u).path.strip('/').split('/')[-1].replace('-',' ').title()
+        if cp and cp['count']>=4: cats.append({'name':re.sub(r'\s*[-|:].*$','',name)[:40] or urlparse(u).path.strip('/'),'path':urlparse(r['url']).path+(('?'+urlparse(r['url']).query) if urlparse(r['url']).query else ''),'count':cp['count'],'hrefs':cp['hrefs'][:80]})
+    return cats
+
+def site_names(s):
+    h=host(SITE).split('.')[0] or 'site'
+    parts=[p for p in re.split(r'[^A-Za-z0-9]+',h) if p]
+    cls=''.join(p[:1].upper()+p[1:] for p in parts) or 'Site'
+    if not cls[0].isalpha(): cls='Site'+cls
+    og=(s.select_one('meta[property="og:site_name"]') or {}).get('content','') if s.select_one('meta[property="og:site_name"]') else ''
+    ttl=txt(s.title.text if s.title else '')
+    disp=og or re.split(r'\s+[-|–]\s+',ttl)[0] or cls
+    return cls,(disp if 2<=len(disp)<=30 else cls)
+
+def pick_query(cards):
+    for it in (cards or {}).get('samples',[]):
+        for w in re.findall(r"[A-Za-zÇĞİÖŞÜçğıöşü]{3,}",it.get('title') or ''):
+            return w.lower()
+    return 'love'
 
 MEDIA=re.compile(r'''https?:(?:\\?/){2}[^"'\s\\<>]+?\.(?:m3u8|mp4|mpd)[^"'\s\\<>]*''')
 FILE=re.compile(r'''file\s*:\s*["']([^"']+)["']''')
@@ -162,7 +223,36 @@ def main(cfg_path):
     global SITE,Q
     cfg=json.load(open(cfg_path,encoding='utf8'));SITE=cfg['site'].rstrip('/');Q=cfg.get('query') or 'love'
     R={'site':SITE,'time':time.strftime('%Y-%m-%dT%H:%M:%SZ',time.gmtime()),'query':Q,'pages':{},'blocked':{},'js':{},'search':{},'pagination':{},'players':[],'notes':[]}
-    docs={}
+    docs={};discovered=None;cats=[]
+    pages=dict(cfg.get('pages') or {})
+    if not pages.get('list') or not pages.get('series') or not pages.get('episode'):
+        r0=get(SITE+'/');sleep(.25)
+        if r0['text'] and not blocked(r0):
+            s0=soup(r0['text']);cats=discover(s0,r0['url']);R['categories']=[{k:v for k,v in c.items() if k!='hrefs'} for c in cats]
+            marker=''
+            allh=[h for c in cats for h in c['hrefs']]
+            for pre in ('/film/','/movie/','/filmler/'):
+                if any(urlparse(h).path.startswith(pre) for h in allh): marker=pre;break
+            ser=next((h for h in allh if not marker or not urlparse(h).path.startswith(marker)),None)
+            flm=next((h for h in allh if marker and urlparse(h).path.startswith(marker)),None)
+            pages.setdefault('home','/')
+            if cats and not pages.get('list'): pages['list']=cats[0]['path']
+            if ser and not pages.get('series'): pages['series']=urlparse(ser).path
+            if flm and not pages.get('film'): pages['film']=urlparse(flm).path
+            R['discovered']={'categories':len(cats),'series':pages.get('series'),'film':pages.get('film'),'list':pages.get('list'),'movieMarker':marker}
+            if pages.get('series') and not pages.get('episode'):
+                rs=get(absu(pages['series']));sleep(.25)
+                if rs['text'] and not blocked(rs):
+                    ep0=episodes(soup(rs['text']),rs['url'])
+                    if ep0 and ep0['sample']: pages['episode']=urlparse(ep0['sample'][-1]['href']).path
+                    elif ep0 is None:
+                        # bölüm bağlantısı ana sayfada olabilir
+                        e1=episodes(s0,r0['url'])
+                        if e1 and e1['sample']: pages['episode']=urlparse(e1['sample'][0]['href']).path
+            R['discovered']['episode']=pages.get('episode')
+            if not pages.get('home'): pages['home']='/'
+        else: R['notes'].append('Ana sayfa okunamadı, sayfalar otomatik bulunamadı.')
+    cfg['pages']=pages
     for name,p in (cfg.get('pages') or {}).items():
         if not p: continue
         u=absu(p);r=get(u);sleep(.25)
@@ -180,6 +270,12 @@ def main(cfg_path):
         if pl: R['pages'][name]['players']=pl
         if name in('series','film'): R['pages'][name]['detail']=series_detail(s,r['url'])
     if not docs: R['notes'].append('Hiçbir sayfa okunamadı (engel ya da bağlantı sorunu).')
+    if not cfg.get('query'):
+        qsrc=None
+        for n_ in ('home','list'):
+            qsrc=(R['pages'].get(n_,{}).get('cards')) if R['pages'].get(n_) else None
+            if qsrc: break
+        Q=pick_query(qsrc);R['query']=Q
     # JS
     scripts=[]
     for n in docs:
@@ -271,16 +367,51 @@ def main(cfg_path):
     R['kotlin']={'searchPaths':[],'pagePattern':R['pagination'].get('pattern')}
     if R['search'].get('best') and R['search']['best']['method']=='GET':
         b=R['search']['best'];R['kotlin']['searchPaths'].append(b['url'].replace(SITE,'').replace(quote(Q),'{q}'))
+    R['config']=build_config(R,docs)
     R['requests']=REQ
     os.makedirs('out',exist_ok=True)
     json.dump(R,open('out/analysis.json','w',encoding='utf8'),ensure_ascii=False,indent=2)
     rep=report(R);open('out/report.md','w',encoding='utf8').write(rep);print(rep)
     return R
 
+def build_config(R,docs):
+    P=R['pages'];home=docs.get('home')
+    cls,disp=site_names(home['s'] if home else soup('<html></html>'))
+    cards=None
+    for k in ('list','home'):
+        if P.get(k,{}).get('cards'): cards=P[k]['cards'];break
+    cats=[{'name':c['name'],'path':c['path']} for c in R.get('categories',[])]
+    if not cats and P.get('list'): cats=[{'name':'Liste','path':urlparse(P['list']['url']).path}]
+    b=R['search'].get('best');search=None
+    if b and b['method']=='GET':
+        search={'path':b['url'].replace(SITE,'').replace(quote(Q),'{q}'),'type':'json' if b['type']=='json' else 'html','card':b.get('cardSel') or '','title':b.get('cardTitle') or '','posterAttr':b.get('cardPoster') or 'src'}
+    det=None;h1=''
+    for k in ('series','film'):
+        if k in docs:
+            d=docs[k]['s'];e=d.select_one('h1');h1=selof(e) if e else ''
+            det=P[k].get('detail');break
+    ep=None
+    for k in ('series','episode'):
+        if P.get(k,{}).get('episodes'): ep=P[k]['episodes'];break
+    pl=None
+    for k in ('episode','film'):
+        if k in docs:
+            pl=player_cfg(docs[k]['s'])
+            if pl: break
+    return {'name':cls,'display':disp,'mainUrl':SITE,'lang':'tr','categories':cats,
+        'card':{'anchor':cards['anchorSel'] if cards else '','title':cards['titleSel'] if cards else '','posterAttr':cards['posterAttr'] if cards else 'src'},
+        'search':search,'pagePattern':R['pagination'].get('pattern') or '?page={n}',
+        'series':{'title':h1 or 'h1','plot':(det['plotCands'][0]['sel'] if det and det.get('plotCands') else ''),'genres':(det['genreLinks'][0]['sel'] if det and det.get('genreLinks') else '')},
+        'episodes':({'item':ep['itemClass'],'num':ep['numSel'],'title':ep['titleSel'],'seasonAttr':ep['seasonAttr'],'container':ep['containerSel']} if ep else None),
+        'players':pl or {'attr':'src','box':'','labelSel':''},
+        'movieMarker':(R.get('discovered') or {}).get('movieMarker','')}
+
 def report(R):
     L=[f"# Site analizi: {R['site']}",f"Tarih: {R['time']} | istek sayısı: {R['requests']}",'','## Sayfalar']
     for k,v in R['pages'].items():
         L.append(f"- {k}: {v.get('status') or v.get('error')} {'(ENGEL: '+str(R['blocked'][k])+')' if R['blocked'].get(k) else ''}"+(f" | kart {v['cards']['anchorSel']} ×{v['cards']['count']}" if v.get('cards') else '')+(f" | bölüm {v['episodes']['itemSel']} ×{v['episodes']['count']}" if v.get('episodes') else ''))
+    d=R.get('discovered')
+    if d: L+=['','## Otomatik keşif',f"- kategori: {d['categories']} | liste: {d.get('list')} | dizi: {d.get('series')} | film: {d.get('film')} | bölüm: {d.get('episode')}"]+['- '+c['name']+' → '+c['path'] for c in R.get('categories',[])]
     L+=['','## Arama']
     b=R['search'].get('best')
     L.append(f"- BULUNDU: {b['method']} {b['url']} → {b['type']}, {b['count']} sonuç, örnek: {' | '.join(b.get('sample') or [])}" if b else '- Çalışan arama adresi bulunamadı.')
