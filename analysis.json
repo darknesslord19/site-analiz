@@ -1,0 +1,486 @@
+{
+  "site": "https://ufilmizle.com",
+  "time": "2026-10-01T01:54:35Z",
+  "query": "şeytan",
+  "pages": {
+    "home": {
+      "url": "https://ufilmizle.com/",
+      "status": 200,
+      "length": 60157,
+      "info": {
+        "title": "Ultra Film - Ultra Full HD 4K Film izle",
+        "h1": "",
+        "ogTitle": "Ultra Film - Ultra Full HD 4K Film izle",
+        "ogImage": "",
+        "description": "Ultra Film izle ⭐ En yeni, en güncel 2026 filmlerini türkçe dublaj ve altıyazılı dil seçenekleriyle Full HD 4K kalitede izleyebilirsiniz.",
+        "csrf": false,
+        "scripts": [
+          "https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js?ver=3.3.1",
+          "https://cdnjs.cloudflare.com/ajax/libs/jquery-migrate/1.4.1/jquery-migrate.min.js?ver=1.4.1",
+          "https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.1/jquery.validate.min.js?ver=1.19.1",
+          "https://www.googletagmanager.com/gtag/js?id=G-N0FH1HHWCX",
+          "https://ufilmizle.com/assets/js/app-core-v17.js",
+          "https://ufilmizle.com/wp-content/themes/filmplus/js/ajax-register.js?ver=1.0",
+          "https://ufilmizle.com/wp-content/themes/filmplus/js/ajax-profile-update.js?ver=1.0",
+          "https://ufilmizle.com/wp-content/themes/filmplus/js/ajax-users-list.js?ver=1.0",
+          "https://ufilmizle.com/wp-content/themes/filmplus/js/live-search.js?ver=1.0",
+          "https://ufilmizle.com/wp-content/themes/filmplus/js/cld.js?ver=6.9.9",
+          "https://ufilmizle.com/wp-content/themes/filmplus/js/pld.js?ver=6.9.9",
+          "https://ufilmizle.com/wp-content/themes/filmplus/js/jquery.simplemodal.js?ver=1.1",
+          "https://ufilmizle.com/wp-content/themes/filmplus/js/simplemodal.js?ver=1.1",
+          "https://ufilmizle.com/wp-content/themes/filmplus/js/jquery.perfect-scrollbar.min.js?ver=6.9.9",
+          "https://ufilmizle.com/wp-content/themes/filmplus/js/owl.carousel.min.js?ver=6.9.9",
+          "https://ufilmizle.com/wp-content/themes/filmplus/js/filmplus.js?ver=6.9.9",
+          "https://ufilmizle.com/wp-content/themes/filmplus/js/blueimp-helper.js?ver=6.9.9",
+          "https://ufilmizle.com/wp-content/themes/filmplus/js/blueimp-gallery.js?ver=6.9.9",
+          "https://ufilmizle.com/wp-content/themes/filmplus/js/jquery.blueimp-gallery.js?ver=6.9.9",
+          "https://ufilmizle.com/wp-content/themes/filmplus/js/comment-validation.js?ver=6.9.9",
+          "https://static.cloudflareinsights.com/beacon.min.js/v31edd6df95cf4e85bb4c19e7a9bdbcba1788362987495"
+        ],
+        "inlineScripts": 11,
+        "dataEndpoints": [],
+        "forms": [
+          {
+            "action": "https://ufilmizle.com/",
+            "method": "get",
+            "inputs": [
+              "s"
+            ]
+          },
+          {
+            "action": "https://ufilmizle.com/wp-login.php",
+            "method": "post",
+            "inputs": [
+              "log",
+              "pwd",
+              "rememberme",
+              "wp-submit",
+              "redirect_to"
+            ]
+          },
+          {
+            "action": "https://ufilmizle.com/wp-login.php?action=lostpassword",
+            "method": "post",
+            "inputs": [
+              "user_login",
+              "wp-submit"
+            ]
+          }
+        ],
+        "searchInputs": [
+          {
+            "sel": "input.field#searchInput",
+            "name": "s",
+            "placeholder": "film arayın..."
+          }
+        ]
+      },
+      "cards": {
+        "anchorSel": "a",
+        "count": 20,
+        "titleSel": "",
+        "posterAttr": "data-src",
+        "samples": [
+          {
+            "href": "https://ufilmizle.com/filmler9/seytan-cocuk-izle/",
+            "title": "Şeytan Çocuk – Devil Boy (2026)",
+            "titleSel": "",
+            "img": "https://ufilmizle.com/wp-content/uploads/2026/09/seytan-cocuk.jpg",
+            "imgAlt": "Şeytan Çocuk – Devil Boy (2026)"
+          },
+          {
+            "href": "https://ufilmizle.com/filmler9/seytan-cocuk-izle/",
+            "title": "",
+            "titleSel": "",
+            "img": "",
+            "imgAlt": ""
+          },
+          {
+            "href": "https://ufilmizle.com/filmler9/victorian-psycho-izle/",
+            "title": "Victorian Psycho – Viktorya Dönemi Psikopatı (2026)",
+            "titleSel": "",
+            "img": "https://ufilmizle.com/wp-content/uploads/2026/09/victorian-psycho.jpg",
+            "imgAlt": "Victorian Psycho – Viktorya Dönemi Psikopatı (2026)"
+          }
+        ],
+        "sampleHrefs": [
+          "https://ufilmizle.com/filmler9/seytan-cocuk-izle/",
+          "https://ufilmizle.com/filmler9/victorian-psycho-izle/",
+          "https://ufilmizle.com/filmler9/cakallarla-dans-8-sututgart-cikarmasi-izle/"
+        ]
+      }
+    }
+  },
+  "blocked": {
+    "home": false
+  },
+  "js": {
+    "scripts": [
+      "https://ufilmizle.com/assets/js/app-core-v17.js",
+      "https://ufilmizle.com/wp-content/themes/filmplus/js/ajax-register.js?ver=1.0",
+      "https://ufilmizle.com/wp-content/themes/filmplus/js/ajax-profile-update.js?ver=1.0",
+      "https://ufilmizle.com/wp-content/themes/filmplus/js/ajax-users-list.js?ver=1.0",
+      "https://ufilmizle.com/wp-content/themes/filmplus/js/live-search.js?ver=1.0",
+      "https://ufilmizle.com/wp-content/themes/filmplus/js/cld.js?ver=6.9.9",
+      "https://ufilmizle.com/wp-content/themes/filmplus/js/pld.js?ver=6.9.9",
+      "https://ufilmizle.com/wp-content/themes/filmplus/js/jquery.simplemodal.js?ver=1.1",
+      "https://ufilmizle.com/wp-content/themes/filmplus/js/simplemodal.js?ver=1.1",
+      "https://ufilmizle.com/wp-content/themes/filmplus/js/jquery.perfect-scrollbar.min.js?ver=6.9.9",
+      "https://ufilmizle.com/wp-content/themes/filmplus/js/owl.carousel.min.js?ver=6.9.9",
+      "https://ufilmizle.com/wp-content/themes/filmplus/js/filmplus.js?ver=6.9.9",
+      "https://ufilmizle.com/wp-content/themes/filmplus/js/blueimp-helper.js?ver=6.9.9",
+      "https://ufilmizle.com/wp-content/themes/filmplus/js/blueimp-gallery.js?ver=6.9.9",
+      "https://ufilmizle.com/wp-content/themes/filmplus/js/jquery.blueimp-gallery.js?ver=6.9.9",
+      "https://ufilmizle.com/wp-content/themes/filmplus/js/comment-validation.js?ver=6.9.9"
+    ],
+    "okCount": 15,
+    "urls": [
+      "//vimeo.com/api/v2/video/",
+      "//vzaar.com/api/videos/"
+    ],
+    "calls": [
+      "$.ajax({ url : ajax_url  [ajax-users-list.js]",
+      "$.ajax({ url : ajax_url  [ajax-users-list.js]",
+      "$.ajax({ url : ajax_url  [ajax-users-list.js]",
+      "$.ajax({ url : ajax_url  [ajax-users-list.js]",
+      "$.ajax({ url : ajax_url  [ajax-users-list.js]",
+      "$.ajax({ url : ajax_url  [ajax-users-list.js]",
+      "$.ajax({ type: 'post'  [cld.js]",
+      "$.ajax({ type: 'post'  [pld.js]",
+      "$.ajax({ url: form[0].action  [simplemodal.js]"
+    ],
+    "near": [
+      "searchInput: tributeType=\"XML\" type=\"rotate\" dur=\"1s\" from=\"0 50 50\" to=\"360 50 50\" repeatCount=\"indefinite\" /> </path> </svg></span>'; var keyword = jQuery('#searchInput').val(); var length = jQuery('#searchInput').val().length; if (length > 2) { jQuery.ajax({ url: ajax_url, type: 'post', data: { action: 'data_fetch', keyw"
+    ]
+  },
+  "search": {
+    "best": null,
+    "tried": [
+      {
+        "url": "https://ufilmizle.com//vimeo.com/api/v2/video/?q=%C5%9Feytan",
+        "method": "GET",
+        "status": 404,
+        "type": "yok",
+        "count": 0,
+        "score": 0
+      },
+      {
+        "url": "https://ufilmizle.com//vimeo.com/api/v2/video/?term=%C5%9Feytan",
+        "method": "GET",
+        "status": 404,
+        "type": "yok",
+        "count": 0,
+        "score": 0
+      },
+      {
+        "url": "https://ufilmizle.com//vimeo.com/api/v2/video/?query=%C5%9Feytan",
+        "method": "GET",
+        "status": 404,
+        "type": "yok",
+        "count": 0,
+        "score": 0
+      },
+      {
+        "url": "https://ufilmizle.com//vimeo.com/api/v2/video/?search=%C5%9Feytan",
+        "method": "GET",
+        "status": 404,
+        "type": "yok",
+        "count": 0,
+        "score": 0
+      },
+      {
+        "url": "https://ufilmizle.com//vimeo.com/api/v2/video/?keyword=%C5%9Feytan",
+        "method": "GET",
+        "status": 404,
+        "type": "yok",
+        "count": 0,
+        "score": 0
+      },
+      {
+        "url": "https://ufilmizle.com//vimeo.com/api/v2/video/%C5%9Feytan",
+        "method": "GET",
+        "status": 404,
+        "type": "yok",
+        "count": 0,
+        "score": 0
+      },
+      {
+        "url": "https://ufilmizle.com//vimeo.com/api/v2/video/",
+        "method": "POST",
+        "status": 404,
+        "type": "yok",
+        "count": 0,
+        "score": 0
+      },
+      {
+        "url": "https://ufilmizle.com//vzaar.com/api/videos/?q=%C5%9Feytan",
+        "method": "GET",
+        "status": 404,
+        "type": "yok",
+        "count": 0,
+        "score": 0
+      },
+      {
+        "url": "https://ufilmizle.com//vzaar.com/api/videos/?term=%C5%9Feytan",
+        "method": "GET",
+        "status": 404,
+        "type": "yok",
+        "count": 0,
+        "score": 0
+      },
+      {
+        "url": "https://ufilmizle.com//vzaar.com/api/videos/?query=%C5%9Feytan",
+        "method": "GET",
+        "status": 404,
+        "type": "yok",
+        "count": 0,
+        "score": 0
+      },
+      {
+        "url": "https://ufilmizle.com//vzaar.com/api/videos/?search=%C5%9Feytan",
+        "method": "GET",
+        "status": 404,
+        "type": "yok",
+        "count": 0,
+        "score": 0
+      },
+      {
+        "url": "https://ufilmizle.com//vzaar.com/api/videos/?keyword=%C5%9Feytan",
+        "method": "GET",
+        "status": 404,
+        "type": "yok",
+        "count": 0,
+        "score": 0
+      },
+      {
+        "url": "https://ufilmizle.com//vzaar.com/api/videos/%C5%9Feytan",
+        "method": "GET",
+        "status": 404,
+        "type": "yok",
+        "count": 0,
+        "score": 0
+      },
+      {
+        "url": "https://ufilmizle.com//vzaar.com/api/videos/",
+        "method": "POST",
+        "status": 404,
+        "type": "yok",
+        "count": 0,
+        "score": 0
+      },
+      {
+        "url": "https://ufilmizle.com/ara?q=%C5%9Feytan",
+        "method": "GET",
+        "status": 200,
+        "type": "ana sayfaya düşüyor",
+        "count": 0,
+        "score": 0
+      },
+      {
+        "url": "https://ufilmizle.com/arama?q=%C5%9Feytan",
+        "method": "GET",
+        "status": 404,
+        "type": "yok",
+        "count": 0,
+        "score": 0
+      },
+      {
+        "url": "https://ufilmizle.com/search?q=%C5%9Feytan",
+        "method": "GET",
+        "status": 404,
+        "type": "yok",
+        "count": 0,
+        "score": 0
+      },
+      {
+        "url": "https://ufilmizle.com/ajax/search?q=%C5%9Feytan",
+        "method": "GET",
+        "status": 404,
+        "type": "yok",
+        "count": 0,
+        "score": 0
+      },
+      {
+        "url": "https://ufilmizle.com/api/search?q=%C5%9Feytan",
+        "method": "GET",
+        "status": 404,
+        "type": "yok",
+        "count": 0,
+        "score": 0
+      },
+      {
+        "url": "https://ufilmizle.com/ajax/ara?q=%C5%9Feytan",
+        "method": "GET",
+        "status": 200,
+        "type": "ana sayfaya düşüyor",
+        "count": 0,
+        "score": 0
+      },
+      {
+        "url": "https://ufilmizle.com/ajax/autosuggest?q=%C5%9Feytan",
+        "method": "GET",
+        "status": 404,
+        "type": "yok",
+        "count": 0,
+        "score": 0
+      },
+      {
+        "url": "https://ufilmizle.com/autosuggest?q=%C5%9Feytan",
+        "method": "GET",
+        "status": 404,
+        "type": "yok",
+        "count": 0,
+        "score": 0
+      },
+      {
+        "url": "https://ufilmizle.com/search/autosuggest?q=%C5%9Feytan",
+        "method": "GET",
+        "status": 200,
+        "type": "ana sayfaya düşüyor",
+        "count": 0,
+        "score": 0
+      },
+      {
+        "url": "https://ufilmizle.com/?s=%C5%9Feytan",
+        "method": "GET",
+        "status": 200,
+        "type": "ana sayfaya düşüyor",
+        "count": 0,
+        "score": 0
+      },
+      {
+        "url": "https://ufilmizle.com/dizi-arsivi?q=%C5%9Feytan",
+        "method": "GET",
+        "status": 404,
+        "type": "yok",
+        "count": 0,
+        "score": 0
+      },
+      {
+        "url": "https://ufilmizle.com/dizi-arsivi?search=%C5%9Feytan",
+        "method": "GET",
+        "status": 404,
+        "type": "yok",
+        "count": 0,
+        "score": 0
+      },
+      {
+        "url": "https://ufilmizle.com/ara/%C5%9Feytan",
+        "method": "GET",
+        "status": 404,
+        "type": "yok",
+        "count": 0,
+        "score": 0
+      },
+      {
+        "url": "https://ufilmizle.com/arama/%C5%9Feytan",
+        "method": "GET",
+        "status": 404,
+        "type": "yok",
+        "count": 0,
+        "score": 0
+      },
+      {
+        "url": "https://ufilmizle.com/search/%C5%9Feytan",
+        "method": "GET",
+        "status": 200,
+        "type": "ana sayfaya düşüyor",
+        "count": 0,
+        "score": 0
+      }
+    ]
+  },
+  "pagination": {
+    "page": "home",
+    "pattern": "/page/{n}",
+    "tried": [
+      {
+        "pattern": "?page={n}",
+        "url": "https://ufilmizle.com?page=2",
+        "status": 200,
+        "verdict": "aynı sayfa"
+      },
+      {
+        "pattern": "?sayfa={n}",
+        "url": "https://ufilmizle.com?sayfa=2",
+        "status": 200,
+        "verdict": "aynı sayfa"
+      },
+      {
+        "pattern": "?p={n}",
+        "url": "https://ufilmizle.com?p=2",
+        "status": 301,
+        "verdict": "yok"
+      },
+      {
+        "pattern": "/page/{n}",
+        "url": "https://ufilmizle.com/page/2",
+        "status": 200,
+        "verdict": "çalışıyor"
+      },
+      {
+        "pattern": "/sayfa/{n}",
+        "url": "https://ufilmizle.com/sayfa/2",
+        "status": 200,
+        "verdict": "aynı sayfa"
+      },
+      {
+        "pattern": "?paged={n}",
+        "url": "https://ufilmizle.com?paged=2",
+        "status": 200,
+        "verdict": "çalışıyor"
+      },
+      {
+        "pattern": "?pg={n}",
+        "url": "https://ufilmizle.com?pg=2",
+        "status": 200,
+        "verdict": "aynı sayfa"
+      }
+    ],
+    "hints": [
+      "rel=next https://ufilmizle.com/page/2/"
+    ]
+  },
+  "players": [],
+  "notes": [],
+  "categories": [],
+  "discovered": {
+    "categories": 0,
+    "series": null,
+    "film": null,
+    "list": null,
+    "movieMarker": "",
+    "episode": null
+  },
+  "kotlin": {
+    "searchPaths": [],
+    "pagePattern": "/page/{n}"
+  },
+  "config": {
+    "name": "Ufilmizle",
+    "display": "Ultra Film -",
+    "mainUrl": "https://ufilmizle.com",
+    "lang": "tr",
+    "categories": [],
+    "card": {
+      "anchor": "a",
+      "title": "",
+      "posterAttr": "data-src"
+    },
+    "search": null,
+    "pagePattern": "/page/{n}",
+    "series": {
+      "title": "h1",
+      "plot": "",
+      "genres": ""
+    },
+    "episodes": null,
+    "players": {
+      "attr": "src",
+      "box": "",
+      "labelSel": ""
+    },
+    "movieMarker": ""
+  },
+  "requests": 53
+}
