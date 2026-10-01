@@ -1,0 +1,60 @@
+name: Patch CS3
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  patch:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with: { distribution: temurin, java-version: "17" }
+      - uses: actions/setup-python@v5
+        with: { python-version: "3.12" }
+
+      - name: smali araçları (Maven)
+        run: |
+          mkdir -p tools/lib
+          cat > pom.xml <<'POM'
+          <project xmlns="http://maven.apache.org/POM/4.0.0"><modelVersion>4.0.0</modelVersion>
+          <groupId>x</groupId><artifactId>x</artifactId><version>1</version>
+          <dependencies>
+          <dependency><groupId>org.smali</groupId><artifactId>smali</artifactId><version>2.5.2</version></dependency>
+          <dependency><groupId>org.smali</groupId><artifactId>baksmali</artifactId><version>2.5.2</version></dependency>
+          </dependencies></project>
+          POM
+          mvn -q dependency:copy-dependencies -DoutputDirectory=tools/lib
+
+      - name: helper.dex derle
+        run: |
+          SDK=${ANDROID_HOME:-$ANDROID_SDK_ROOT}
+          AJ=$(ls -d $SDK/platforms/android-*/android.jar | sort -V | tail -1)
+          D8=$(ls -d $SDK/build-tools/*/d8 | sort -V | tail -1)
+          mkdir -p build/classes
+          javac --release 8 -cp "$AJ" -d build/classes $(find helper -name '*.java')
+          "$D8" --min-api 21 --lib "$AJ" --output build $(find build/classes -name '*.class')
+          mv build/classes.dex helper.dex
+
+      # sites.json: {"Provider.cs3": "https://eski-domain.com"}
+      - name: Yamala
+        run: |
+          mkdir -p output
+          for f in input/*.cs3; do
+            [ -e "$f" ] || continue
+            name=$(basename "$f")
+            old=$(jq -r --arg n "$name" '.[$n] // empty' sites.json)
+            [ -n "$old" ] || { echo "skip $name"; continue; }
+            python patch_cs3.py "$f" --domain "$old" -o "output/$name"
+          done
+
+      - name: Commit
+        run: |
+          git config user.name "cs3-bot"
+          git config user.email "bot@users.noreply.github.com"
+          git add output
+          git commit -m "Patched CS3" || echo "no changes"
+          git push
